@@ -20,6 +20,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
+    "corsheaders",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
     "habits",
     "users",
 ]
@@ -50,7 +55,17 @@ TEMPLATES = [
         },
     },
 ]
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "habits.paginators.MyCustomPagination",
 
+    "PAGE_SIZE": 10,
+}
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
@@ -99,3 +114,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 TELEGRAM_URL = os.getenv('TELEGRAM_URL')
 
 API_TOKEN_TELEGRAM = os.getenv('API_TOKEN_TELEGRAM')
+
+REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_PORT = os.environ.get('REDIS_PORT', '6379')  # строка нормально работает в f-string
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/0',
+    }
+}
+
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

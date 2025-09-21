@@ -29,5 +29,12 @@ def validate_pleasant_habit(habit):
 
 def validate_periodicity(habit):
     """Валидатор на выполнение привычки не реже, чем 1 раз в 7 дней"""
-    if habit.get('frequency') < 1 or habit.get('frequency') > 7:
+    frequency = habit.get('frequency')  # Получаем значение frequency
+
+    # Проверка, что frequency не None
+    if frequency is None:
+        raise ValidationError("Периодичность (frequency) не может быть None. Укажите значение от 1 до 7.")
+
+    # Теперь можно безопасно сравнивать
+    if frequency < 1 or frequency > 7:
         raise ValidationError("Периодичность должна быть от 1 до 7 дней.")
