@@ -9,11 +9,9 @@ from habits.serializers import HabitSerializer
 from users.permissions import IsOwnerOrReadOnly
 
 
-
-
 class HabitViewSet(ModelViewSet):
     """Контроллер для представления привычек"""
-    queryset = Habit.objects.all()
+    queryset = Habit.objects.all().order_by('-id')
     serializer_class = HabitSerializer
     pagination_class = MyCustomPagination
 

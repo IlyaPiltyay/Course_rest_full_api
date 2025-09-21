@@ -17,12 +17,12 @@ class HabitTrackerTestCase(APITestCase):
 
         self.habit = Habit.objects.create(
             user=self.user,
-            place="Дом",
+            place="Парк",
             time="12:30:00",
-            action="Поприседать",
+            action="Погулять с собакой",
             sign_pleasant_habit=False,
             frequency=1,
-            reward="сьесть конфетку",
+            reward="Поиграть",
             time_to_complete=60,
             is_public=True
         )
@@ -34,12 +34,12 @@ class HabitTrackerTestCase(APITestCase):
         url = reverse("habits:habits-list")
         data = {
             "user": 1,
-            "place": "Дом",
+            "place": "Парк",
             "time": "12:30:00",
-            "action": "Поприседать",
+            "action": "Погулять с собакой",
             "sign_pleasant_habit": False,
             "frequency": 1,
-            "reward": "сьесть конфетку",
+            "reward": "Поиграть",
             "time_to_complete": 60,
             "is_public": True
         }
@@ -70,7 +70,7 @@ class HabitTrackerTestCase(APITestCase):
         """Тест по валидации продолжительности привычки"""
         url = reverse("habits:habits-list")
         data = {
-            "place": "Стадион",
+            "place": "Зал",
             "time": "07:00:00",
             "action": "Заниматься спортом",
             "sign_pleasant_habit": False,
@@ -89,14 +89,14 @@ class HabitTrackerTestCase(APITestCase):
         """Тест по валидации периодичности привычки"""
         url = reverse("habits:habits-list")
         data = {
-            "place": "Стадион",
+            "place": "Зал",
             "time": "07:00:00",
             "action": "Заниматься спортом",
             "sign_pleasant_habit": False,
             "frequency": 8,
             "reward": None,
             "time_to_complete": 150,
-            "is_public": False,
+            "is_public": False
         }
         response = self.client.post(url, data, format="json")
 
