@@ -109,23 +109,24 @@ jobs:
 
       - name: Deploy to Server
         run: |
-               ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}" << 'EOF'
-               docker pull "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}" << 'EOF'
+            # Pull the latest image from Docker Hub
+            docker pull "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
           
-          # Check if the container exists and stop/remove it if it does
-               if [ $(docker ps -aq -f name=course_rest_full_api) ]; then
-               echo "Stopping existing container..."
-               docker stop course_rest_full_api || true
-               echo "Removing existing container..."
-               docker rm course_rest_full_api || true
-               else
-               echo "No existing container found, skipping stop and remove."
-               fi
+            # Check if the container exists and stop/remove it if it does
+            if [ $(docker ps -aq -f name=course_rest_full_api) ]; then
+                echo "Stopping existing container..."
+                docker stop course_rest_full_api || true
+                echo "Removing existing container..."
+                docker rm course_rest_full_api || true
+            else
+                echo "No existing container found, skipping stop and remove."
+            fi
           
-          # Add a small delay to ensure the removal is complete
-               sleep 3
+            # Add a small delay to ensure the removal is complete
+            sleep 3
           
-          # Run the new container
-               echo "Starting new container..."
-               docker run -d --name course_rest_full_api -p 8000:8000 "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
-               EOF
+            # Run the new container
+            echo "Starting new container..."
+            docker run -d --name course_rest_full_api -p 8000:8000 "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
+          EOF
