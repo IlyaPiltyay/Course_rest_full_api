@@ -96,3 +96,5 @@ python manage.py runserver
    sudo apt install docker-ce -y
 4. Проверьте, что Docker установлен:
    sudo systemctl status docker
+
+http://89.169.191.81:8000
