@@ -1,4 +1,5 @@
 name: Django CI
+
 on: [ push, pull_request ]
 
 jobs:
@@ -31,21 +32,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Шаг для отладки: проверьте наличие переменных окружения
       - name: Display environment variables
         run: |
           echo "DATABASE NAME: $NAME"
           echo "DATABASE USER: $USER"
           echo "DATABASE HOST: $HOST"
           echo "DATABASE PORT: $PORT"
-
-      # Шаг для отладки
-      - name: Check current directory and content
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Contents of the current directory:"
-          ls -la
 
       - name: Install system deps (psycopg2 & pg_isready)
         run: |
@@ -59,7 +51,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Установите зависимости в корневом каталоге
           poetry install --no-root
 
       - name: Prepare CI DB env (force TCP host)
@@ -83,14 +74,11 @@ jobs:
 
       - name: Run migrations
         run: |
-          # Запустите миграции в корневом каталоге
           poetry run python manage.py migrate --noinput
 
       - name: Run tests
         run: |
-          # Запустите тесты в корневом каталоге
           poetry run python manage.py test
-
 
   build:
     runs-on: ubuntu-latest
@@ -103,10 +91,12 @@ jobs:
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} Course_rest_full_api
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -117,12 +107,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+                      docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+                      docker stop myapp || true
+                      docker rm myapp || true
+                      docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+                    EOF
