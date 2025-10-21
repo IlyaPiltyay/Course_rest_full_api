@@ -8,12 +8,9 @@ from users.models import User
 
 class HabitTrackerTestCase(APITestCase):
     """Класс тестирования модели привычки"""
+
     def setUp(self):
-        self.user = User.objects.create(
-            email="test@example.com",
-            password="password123",
-            tg_chat_id="123456789"
-        )
+        self.user = User.objects.create(email="test@example.com", password="password123", tg_chat_id="123456789")
 
         self.habit = Habit.objects.create(
             user=self.user,
@@ -24,7 +21,7 @@ class HabitTrackerTestCase(APITestCase):
             frequency=1,
             reward="Поиграть",
             time_to_complete=60,
-            is_public=True
+            is_public=True,
         )
 
         self.client.force_authenticate(user=self.user)
@@ -41,7 +38,7 @@ class HabitTrackerTestCase(APITestCase):
             "frequency": 1,
             "reward": "Поиграть",
             "time_to_complete": 60,
-            "is_public": True
+            "is_public": True,
         }
         response = self.client.post(url, data)
 
@@ -83,7 +80,9 @@ class HabitTrackerTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn(
-            "Продолжительность выполнения привычки не может превышать 120 секунд.", str(response.data),)
+            "Продолжительность выполнения привычки не может превышать 120 секунд.",
+            str(response.data),
+        )
 
     def test_habit_periodicity_validation(self):
         """Тест по валидации периодичности привычки"""
@@ -96,7 +95,7 @@ class HabitTrackerTestCase(APITestCase):
             "frequency": 8,
             "reward": None,
             "time_to_complete": 150,
-            "is_public": False
+            "is_public": False,
         }
         response = self.client.post(url, data, format="json")
 

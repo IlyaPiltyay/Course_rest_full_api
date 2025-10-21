@@ -1,4 +1,3 @@
-from django.views.generic import TemplateView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
@@ -11,7 +10,8 @@ from users.permissions import IsOwnerOrReadOnly
 
 class HabitViewSet(ModelViewSet):
     """Контроллер для представления привычек"""
-    queryset = Habit.objects.all().order_by('-id')
+
+    queryset = Habit.objects.all().order_by("-id")
     serializer_class = HabitSerializer
     pagination_class = MyCustomPagination
 
@@ -44,6 +44,7 @@ class HabitViewSet(ModelViewSet):
 
 class PublicHabitListApiView(generics.ListAPIView):
     """Контроллер на вывод только публичных привычек"""
+
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
