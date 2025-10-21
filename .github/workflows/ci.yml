@@ -5,10 +5,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      POSTGRES_DB: Course_rest_full_api
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6577
+      NAME: Course_rest_full_api          # Название базы данных
+      USER: postgres                       # Пользователь базы данных
+      PASSWORD: 6577                      # Пароль базы данных
       SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Используем секрет из GitHub
+      HOST: 127.0.0.1                     # Адрес базы данных
+      PORT: 5432                          # Порт базы данных
 
     services:
       postgres:
@@ -30,13 +32,12 @@ jobs:
         uses: actions/checkout@v3
 
       # Шаг для отладки: проверьте наличие переменных окружения
-      - name: Check if SECRET_KEY is set
+      - name: Display environment variables
         run: |
-          if [ -z "$SECRET_KEY" ]; then
-            echo "SECRET_KEY is not set."
-          else
-            echo "SECRET_KEY is set."
-          fi
+          echo "DATABASE NAME: $NAME"
+          echo "DATABASE USER: $USER"
+          echo "DATABASE HOST: $HOST"
+          echo "DATABASE PORT: $PORT"
 
       # Шаг для отладки
       - name: Check current directory and content
@@ -66,13 +67,13 @@ jobs:
           echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
           echo "PGHOST=127.0.0.1" >> $GITHUB_ENV
           echo "PGPORT=5432" >> $GITHUB_ENV
-          echo "PGUSER=${POSTGRES_USER}" >> $GITHUB_ENV
-          echo "PGPASSWORD=${POSTGRES_PASSWORD}" >> $GITHUB_ENV
+          echo "PGUSER=${USER}" >> $GITHUB_ENV
+          echo "PGPASSWORD=${PASSWORD}" >> $GITHUB_ENV
 
       - name: Wait for Postgres
         run: |
           for i in {1..30}; do
-            if pg_isready -h 127.0.0.1 -p 5432 -U "$POSTGRES_USER" -q; then
+            if pg_isready -h 127.0.0.1 -p 5432 -U "$USER" -q; then
               echo "Postgres is ready"
               break
             fi
