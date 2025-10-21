@@ -107,12 +107,23 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+                      # Pull the latest image from Docker Hub
+                      docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+
+                      # Check if the container exists and stop/remove it if it does
+                      if [ $(docker ps -aq -f name=myapp) ]; then
+                          echo "Stopping existing container..."
+                          docker stop myapp
+                          echo "Removing existing container..."
+                          docker rm myapp
+                      else
+                          echo "No existing container found, skipping stop and remove."
+                      fi
+
+                      # Run the new container
+                      echo "Starting new container..."
+                      docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+                    EOF
