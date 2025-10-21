@@ -68,11 +68,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('NAME', 'Course_rest_full_api'),  # База данных
-        'USER': os.getenv('USER', 'postgres'),              # Пользователь
-        'PASSWORD': os.getenv('PASSWORD', '6577'),          # Пароль
-        'HOST': os.getenv('HOST', 'localhost'),              # Хост
-        'PORT': os.getenv('PORT', '5432'),                   # Порт
+        'NAME': 'Course_rest_full_api',  # База данных
+        'USER': 'postgres',               # Пользователь
+        'PASSWORD': '6577',               # Пароль
+        'HOST': 'db',                     # Имя контейнера (внутренняя адресация)
+        'PORT': '5432',                   # Порт
     }
 }
 
