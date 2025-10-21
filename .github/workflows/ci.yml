@@ -6,12 +6,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      NAME: Course_rest_full_api          # Название базы данных
-      USER: postgres                       # Пользователь базы данных
-      PASSWORD: 6577                      # Пароль базы данных
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Используем секрет из GitHub
-      HOST: 127.0.0.1                     # Адрес базы данных
-      PORT: 5432                          # Порт базы данных
+      NAME: Course_rest_full_api                  # Название базы данных
+      USER: postgres                               # Пользователь базы данных
+      PASSWORD: 6577                              # Пароль базы данных
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}      # Используем секрет из GitHub
+      HOST: 127.0.0.1                             # Адрес базы данных
+      PORT: 5432                                  # Порт базы данных
 
     services:
       postgres:
@@ -39,7 +39,7 @@ jobs:
           echo "DATABASE HOST: $HOST"
           echo "DATABASE PORT: $PORT"
 
-      - name: Install system deps (psycopg2 & pg_isready)
+      - name: Install system dependencies (psycopg2 & pg_isready)
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libpq-dev postgresql-client
@@ -53,7 +53,7 @@ jobs:
         run: |
           poetry install --no-root
 
-      - name: Prepare CI DB env (force TCP host)
+      - name: Prepare CI DB environment (force TCP host)
         run: |
           echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
           echo "PGHOST=127.0.0.1" >> $GITHUB_ENV
@@ -88,15 +88,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
-        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+          docker build -t "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}" .
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          docker push "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
 
   deploy:
     runs-on: ubuntu-latest
@@ -109,24 +109,23 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            # Pull the latest image from Docker Hub
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}" << 'EOF'
+          docker pull "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
 
-            # Check if the container exists and stop/remove it if it does
-            if [ $(docker ps -aq -f name=myapp) ]; then
-                echo "Stopping existing container..."
-                docker stop myapp || true
-                echo "Removing existing container..."
-                docker rm myapp || true
-            else
-                echo "No existing container found, skipping stop and remove."
-            fi
+                      # Check if the container exists and stop/remove it if it does
+                      if [ $(docker ps -aq -f name=course_rest_full_api) ]; then
+                          echo "Stopping existing container..."
+                          docker stop course_rest_full_api || true
+                          echo "Removing existing container..."
+                          docker rm course_rest_full_api || true
+                      else
+                          echo "No existing container found, skipping stop and remove."
+                      fi
 
-            # Add a small delay to ensure the removal is complete
-            sleep 3
+                      # Add a small delay to ensure the removal is complete
+                      sleep 3
 
-            # Run the new container
-            echo "Starting new container..."
-            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+                      # Run the new container
+                      echo "Starting new container..."
+                      docker run -d --name course_rest_full_api -p 8000:8000 "${{ secrets.DOCKER_HUB_USERNAME }}/course_rest_full_api:${{ github.sha }}"
+                    EOF
