@@ -70,9 +70,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.getenv("NAME"),
         "USER": os.getenv("USER"),
-        "PASSWORD": os.getenv("PASSWORD"),
-        "HOST": "db",
-        "PORT": "5432",
+        "PASSWORD": os.getenv("PASSWORD"),                    # Пароль для пользователя
+        "HOST": "db",                                        # Хост базы данных (имя сервиса в docker-compose)
+        "PORT": "5432",                                      # Порт базы данных
     }
 }
 
