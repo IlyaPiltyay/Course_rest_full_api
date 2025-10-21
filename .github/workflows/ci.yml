@@ -101,10 +101,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Add SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+          eval "$(ssh-agent -s)"
+          ssh-add private_key
+
       - name: Deploy to Server
         run: |
           ssh -n -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-              # Убедитесь, что вы не используете вложенный SSH
               docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:bde74fe075800731d094a10c05e190ee72e5e0e7
               docker stop myapp || true
               docker rm myapp || true
