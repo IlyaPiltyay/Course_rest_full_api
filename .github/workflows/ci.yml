@@ -10,7 +10,7 @@ jobs:
       USER: postgres                               # Пользователь базы данных
       PASSWORD: 6577                              # Пароль базы данных
       SECRET_KEY: ${{ secrets.SECRET_KEY }}      # Используем секрет из GitHub
-      HOST: 127.0.0.1                             # Адрес базы данных
+      HOST: localhost                            # Адрес базы данных
       PORT: 5432                                  # Порт базы данных
 
     services:

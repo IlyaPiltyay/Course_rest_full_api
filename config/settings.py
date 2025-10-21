@@ -71,7 +71,7 @@ DATABASES = {
         'NAME': 'Course_rest_full_api',  # База данных
         'USER': 'postgres',               # Пользователь
         'PASSWORD': '6577',               # Пароль
-        'HOST': 'db',                     # Имя контейнера (внутренняя адресация)
+        'HOST': os.getenv('HOST'),                     # Имя контейнера (внутренняя адресация)
         'PORT': '5432',                   # Порт
     }
 }
