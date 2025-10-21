@@ -99,3 +99,4 @@ python manage.py runserver
 
 http://89.169.191.81:8000
 
+docker-compose exec web poetry run python manage.py migrate --noinput

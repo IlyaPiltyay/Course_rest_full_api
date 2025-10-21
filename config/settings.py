@@ -66,15 +66,15 @@ REST_FRAMEWORK = {
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("NAME"),
-        "USER": os.getenv("USER"),
-        "PASSWORD": os.getenv("PASSWORD"),                    # Пароль для пользователя
-        "HOST": "db",                                        # Хост базы данных (имя сервиса в docker-compose)
-        "PORT": "5432",                                      # Порт базы данных
-    }
-}
+       "default": {
+           "ENGINE": "django.db.backends.postgresql_psycopg2",
+           "NAME": os.getenv("NAME"),
+           "USER": os.getenv("USER"),
+           "PASSWORD": os.getenv("PASSWORD"),
+           "HOST": "db",  # здесь должно быть имя контейнера
+           "PORT": "5432",
+       }
+   }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
