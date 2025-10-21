@@ -66,13 +66,13 @@ REST_FRAMEWORK = {
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('NAME', 'default_db_name'),
-        'USER': os.environ.get('USER', 'default_user'),
-        'PASSWORD': os.environ.get('PASSWORD', 'default_password'),
-        'HOST': os.environ.get('HOST', 'localhost'),
-        'PORT': os.environ.get('PORT', '5432'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv("NAME"),
+        "USER": os.getenv("USER"),
+        "PASSWORD": os.getenv("PASSWORD"),
+        "HOST": os.getenv("HOST"),
+        "PORT": os.getenv("PORT"),
     }
 }
 
