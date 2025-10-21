@@ -35,10 +35,6 @@ jobs:
           pwd
           echo "Contents of the current directory:"
           ls -la
-          echo "Contents of the parent directory:"
-          ls -la ..
-          echo "Checking full path of 'Course_rest_full_api':"
-          find . -name "Course_rest_full_api"
 
       - name: Install system deps (psycopg2 & pg_isready)
         run: |
@@ -52,9 +48,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Покажите заново содержимое директории
-          ls -la
-          cd Course_rest_full_api # Это место, где мы проверяем наличие папки
+          # Установите зависимости в корневом каталоге
           poetry install --no-root
 
       - name: Prepare CI DB env (force TCP host)
@@ -78,12 +72,12 @@ jobs:
 
       - name: Run migrations
         run: |
-          cd Course_rest_full_api
+          # Запустите миграции в корневом каталоге
           poetry run python manage.py migrate --noinput
 
       - name: Run tests
         run: |
-          cd Course_rest_full_api
+          # Запустите тесты в корневом каталоге
           poetry run python manage.py test
 
   build:
