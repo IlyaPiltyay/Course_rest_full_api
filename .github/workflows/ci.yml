@@ -27,11 +27,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
       - name: Install system deps (psycopg2 & pg_isready)
         run: |
           sudo apt-get update
@@ -44,18 +39,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd Course_rest_full_api
           poetry install --no-root
 
       - name: Prepare CI DB env (force TCP host)
         run: |
-          # В docker-compose у вас DB_HOST='db'; в CI сервис доступен на 127.0.0.1
           echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
-          # Для уверенности также задаём libpq переменные
           echo "PGHOST=127.0.0.1" >> $GITHUB_ENV
           echo "PGPORT=5432" >> $GITHUB_ENV
           echo "PGUSER=${POSTGRES_USER}" >> $GITHUB_ENV
           echo "PGPASSWORD=${POSTGRES_PASSWORD}" >> $GITHUB_ENV
-          # SECRET_KEY: используем временный, если у вас нет секрета в репо
           if [ -n "${{ secrets.SECRET_KEY }}" ]; then
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
           else
@@ -94,7 +87,7 @@ jobs:
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} Course_rest_full_api
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
@@ -107,7 +100,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
-
 
       - name: Deploy to Server
         run: |
