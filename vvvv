@@ -1,0 +1,61 @@
+{
+    "email": "ilya.piltya@mail.ru",
+    "password": "DeE6RiRZ1Fh1Ti4TLdpT"
+}
+
+{
+    "email": "ilya.piltya@mail.ru",
+    "first_name": "gg",
+    "last_name": "gg"
+}
+
+
+
+{
+    "id": 2,
+    "password": "pbkdf2_sha256$1000000$hn0W8RO2h1DoHNclZmWJOi$kQ0H5qnexbA58AxXmcq9R5CoRLg6dM2aCfRP7ZlkFe8=",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-20T11:21:15.084945+03:00",
+    "email": "ilya.piltya@mail.ru",
+    "first_name": "gg",
+    "last_name": "gg",
+    "phone_number": null,
+    "avatar": null,
+    "city": null,
+    "token": null,
+    "tg_chat_id": null,
+    "groups": [],
+    "user_permissions": []
+}
+
+
+{
+    "password": "DeE6RiRZ1Fh1Ti4TLdpT",
+    "email": "piltya@mail.ru",
+    "first_name": "lilo",
+    "last_name": "lilo"
+}
+
+
+{
+    "id": 3,
+    "password": "pbkdf2_sha256$1000000$Vok6gxPOCE2PdwlIeNN0rK$6C5MlZfpLj+IuUJAeO7t+mJDiQBW7seIZoediK8LyZo=",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-20T11:36:32.691580+03:00",
+    "email": "piltya@mail.ru",
+    "first_name": "lilo",
+    "last_name": "lilo",
+    "phone_number": null,
+    "avatar": null,
+    "city": null,
+    "token": null,
+    "tg_chat_id": null,
+    "groups": [],
+    "user_permissions": []
+}
