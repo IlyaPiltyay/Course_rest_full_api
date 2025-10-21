@@ -20,6 +20,7 @@ git@github.com:IlyaPiltyay/Course_rest_full_api.git
 poetry install
 ```
 
+
 ## Использование:
 
 python manage.py runserver
