@@ -8,6 +8,7 @@ jobs:
       POSTGRES_DB: Course_rest_full_api
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 6577
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Используем секрет из GitHub
 
     services:
       postgres:
@@ -27,6 +28,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
+      # Шаг для отладки: проверьте наличие переменных окружения
+      - name: Display env variables
+        run: |
+          echo "SECRET_KEY: $SECRET_KEY"
 
       # Шаг для отладки
       - name: Check current directory and content
