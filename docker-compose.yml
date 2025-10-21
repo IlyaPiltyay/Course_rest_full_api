@@ -10,7 +10,7 @@ services:
       - ./html:/usr/share/nginx/html
   web:
     build: .
-    env_file: ".env"
+    env_file: .env
     working_dir: /app
     command: >
       sh -c "poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
@@ -21,7 +21,7 @@ services:
       - redis      # Указывает, что web-сервис также зависит от redis (опционально)
 
   celery:
-    env_file: ".env"
+    env_file: .env
     build: .
     working_dir: /app
     command: poetry run celery -A config worker --loglevel=info --pool=solo
@@ -30,7 +30,7 @@ services:
       - redis     # Указывает, что celery зависит от redis
 
   celery_beat:
-    env_file: ".env"
+    env_file: .env
     build: .
     working_dir: /app
     command: poetry run celery -A config beat --loglevel=info
