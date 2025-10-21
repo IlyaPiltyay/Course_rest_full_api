@@ -100,18 +100,13 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-              docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          ssh -n -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+              # Убедитесь, что вы не используете вложенный SSH
+              docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:bde74fe075800731d094a10c05e190ee72e5e0e7
               docker stop myapp || true
               docker rm myapp || true
-              docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+              docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:bde74fe075800731d094a10c05e190ee72e5e0e7
           EOF
