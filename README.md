@@ -20,10 +20,6 @@ git@github.com:IlyaPiltyay/Course_rest_full_api.git
 poetry install
 ```
 
-
-
-
-
 ## Использование:
 
 python manage.py runserver
@@ -39,7 +35,6 @@ python manage.py runserver
 - Документация проекта доступна по адресам swagger/ и redoc/.
 - Используйте swagger/ для интерактивного тестирования API.
 - redoc/ предоставляет более подробное представление документации.
-
 
 ## Основные команды Docker и Docker Compose
 
@@ -80,6 +75,19 @@ python manage.py runserver
     ls -l
     ```
 
+### 2. Настройка CI/CD с GitHub Actions
+
+1. Создайте каталог для workflows:
+   В вашем репозитории создайте папку .github/workflows, если она еще не существует.
+   mkdir -p .github/workflows
+
+2. Создайте файл workflow:
+   Создайте новый файл с именем ci.yml в папке .github/workflows:
+   nano .github/workflows/ci.yml
+
+3. Заполните файл конфигурацией:
+4. Добавьте SSH-ключи:
+
 ### 1. Настройка удаленного сервера
 
 1. Подключитесь к вашему удаленному серверу:
@@ -94,9 +102,36 @@ python manage.py runserver
    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
    sudo apt update
    sudo apt install docker-ce -y
+
 4. Проверьте, что Docker установлен:
    sudo systemctl status docker
+5. Клонируйте репозиторий на сервер:
+   git clone <repository-url>
+   cd <имя-репозитория>
+6. Создайте файл Nginx со следующими конфигурациями
+   events {
+   worker_connections 1024;
+   }
+   http {
+   upstream django
+   {
+   server web:8000;
+   }
+   server {
+   listen 80;
+   server_name _;
+   location /static/ {
+   alias /app/static/;
+   }
+
+        location / {
+        proxy_pass http://django ;
+        }
+   }
+
+}
+
+7. Перейдите по адресу http://89.169.191.81:8000
 
 http://89.169.191.81:8000
 
-docker-compose exec web poetry run python manage.py migrate --noinput
