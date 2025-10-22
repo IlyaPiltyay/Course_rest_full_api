@@ -103,6 +103,7 @@ python manage.py runserver
    sudo apt update
    sudo apt install docker-ce -y
 
+
 4. Проверьте, что Docker установлен:
    sudo systemctl status docker
 5. Клонируйте репозиторий на сервер:
