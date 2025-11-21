@@ -1,6 +1,6 @@
 # Course_rest_full_api
 
-Курсовой проект Django_Rest
+трекер привычек
 
 # Проект разработки сервиса трекера полезных привычек с помощью Django REST Framework
 
